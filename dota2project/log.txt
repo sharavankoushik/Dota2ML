@@ -1,0 +1,9 @@
+DEBUG:dotabot:Doing GMH query for start_at_match_id=None
+DEBUG:dotabot:Doing GMH query for start_at_match_id=None
+DEBUG:dotabot:Doing GMH query for start_at_match_id=None
+DEBUG:dotabot:Doing GMH query for start_at_match_id=None
+DEBUG:dotabot:Doing GMH query for start_at_match_id=None
+DEBUG:dotabot:Doing GMH query for start_at_match_id=None
+DEBUG:dotabot:Doing GMH query for start_at_match_id=None
+DEBUG:dotabot:Doing GMH query for start_at_match_id=None
+DEBUG:dotabot:Encountered match 3665011983 already in database, exiting.

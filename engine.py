@@ -15,14 +15,16 @@ def get_hero_human_readable(hero_id):
 
 def main():
     # Fill these out using hero IDs (see web API)
-    my_team = [76, 54]
+    my_team = []
     their_team = [5, 15, 46, 91, 13]
 
     print('My Team: %s' % [get_hero_human_readable(hero_id) for hero_id in my_team])
     print('Their Team: %s' % [get_hero_human_readable(hero_id) for hero_id in their_team])
     print('Recommend:')
-    #engine = Engine(D2KNearestNeighbors())
-    engine = Engine(D2LogisticRegression())
+    '''Predicting Match Outcome Using K-Nearest Neighbors'''
+    engine = Engine(D2KNearestNeighbors())
+    '''Validating the Importance of Hero Selection Using Logistic Regression'''
+    #engine = Engine(D2LogisticRegression())
     recommendations = engine.recommend(my_team, their_team)
     print(recommendations)
     for prob, hero in recommendations:
@@ -39,8 +41,8 @@ class Engine:
 
     def recommend(self, my_team, their_team, human_readable=False):
         '''Returns a list of (hero, probablility of winning with hero added) recommended to complete my_team.'''
-        assert len(my_team) <= 5
-        assert len(their_team) <= 5
+        assert len(my_team)<= 5
+        assert 1<= len(their_team) <= 5
 
         hero_candidates = self.get_candidates(my_team, their_team)
         return self.algorithm.recommend(my_team, their_team, hero_candidates)

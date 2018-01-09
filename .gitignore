@@ -23,6 +23,8 @@ parts/
 sdist/
 var/
 wheels/
+.idea/*
+.ipynb_checkpoints/*
 *.egg-info/
 .installed.cfg
 *.egg
