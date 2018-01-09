@@ -5,7 +5,7 @@ __pycache__/
 *.DS_Store
 *.npz
 *.pkl
-
+LICENSE
 # C extensions
 *.so
 
