@@ -1,12 +1,12 @@
 from pymongo import MongoClient
 from progressbar import ProgressBar, Bar, Percentage, FormatLabel, ETA
 import numpy as np
-
+import os
+from sklearn.model_selection import train_test_split
 np.set_printoptions(threshold=np.nan)
-
-client = MongoClient()
-db = client.dotabot
-matches = db.matches
+client = MongoClient(host='localhost',port=27017)
+db = client[os.getenv('DOTABOT_DB_NAME', 'dotabot')]
+match_collection = db.matches
 
 # We're going to create a training matrix, X, where each
 # row is a different match and each column is a feature
@@ -21,7 +21,7 @@ NUM_FEATURES = NUM_HEROES * 2
 
 # Our training label vector, Y, is a bit vector indicating
 # whether radiant won (1) or lost (-1)
-NUM_MATCHES = matches.count()
+NUM_MATCHES = match_collection.count()-1000
 
 # Initialize training matrix
 X = np.zeros((NUM_MATCHES, NUM_FEATURES), dtype=np.int8)
@@ -29,10 +29,11 @@ X = np.zeros((NUM_MATCHES, NUM_FEATURES), dtype=np.int8)
 # Initialize training label vector
 Y = np.zeros(NUM_MATCHES, dtype=np.int8)
 
+#progressbar and widget info for commandline
 widgets = [FormatLabel('Processed: %(value)d/%(max)d matches. '), ETA(), Percentage(), ' ', Bar()]
 pbar = ProgressBar(widgets=widgets, maxval=NUM_MATCHES).start()
 
-for i, record in enumerate(matches.find()):
+for i, record in enumerate(match_collection.find()):
     pbar.update(i)
     Y[i] = 1 if record['radiant_win'] else -1
     players = record['players']
@@ -49,18 +50,18 @@ for i, record in enumerate(matches.find()):
 
 pbar.finish()
 
-print "Permuting, generating train and test sets."
-indices = np.random.permutation(NUM_MATCHES)
-test_indices = indices[0:NUM_MATCHES/10]
-train_indices = indices[NUM_MATCHES/10:NUM_MATCHES]
+print("Permuting, generating train and test sets.")
+#indices = np.random.permutation(NUM_MATCHES)
+#test_indices = indices[0:NUM_MATCHES//10]
+#train_indices = indices[NUM_MATCHES//10:NUM_MATCHES]
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
+#X_test = X[test_indices]
+#Y_test = Y[test_indices]
 
-X_test = X[test_indices]
-Y_test = Y[test_indices]
+#X_train = X[train_indices]
+#Y_train = Y[train_indices]
 
-X_train = X[train_indices]
-Y_train = Y[train_indices]
-
-print "Saving output file now..."
-np.savez_compressed('test_%d.npz' % len(test_indices), X=X_test, Y=Y_test)
-np.savez_compressed('train_%d.npz' % len(train_indices), X=X_train, Y=Y_train)
+print("Saving output file now...")
+np.savez_compressed('test_%d.npz' % len(X_test), X=X_test, Y=Y_test)
+np.savez_compressed('train_%d.npz' % len(X_train), X=X_train, Y=Y_train)
 

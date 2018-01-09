@@ -1,5 +1,5 @@
 import numpy as np
-import pickle
+import pickle,joblib
 from progressbar import ProgressBar, Bar, Percentage, FormatLabel, ETA
 from sklearn.metrics import precision_recall_fscore_support
 
@@ -7,7 +7,7 @@ NUM_HEROES = 108
 NUM_FEATURES = NUM_HEROES*2
 
 # Import the test x matrix and Y vector
-preprocessed = np.load('test_5669.npz')
+preprocessed = np.load('../logistic_regression/test_16401.npz')
 X = preprocessed['X']
 Y = preprocessed['Y']
 
@@ -25,9 +25,8 @@ def poly_weights_evaluate(distances):
     return np.array([weights])
 
 def test():
-    with open('evaluate_model_51022.pkl', 'r') as input_file:
-            model = pickle.load(input_file)
-
+    file_name = 'k_nearest_neighbors/evaluate_model_10000.sav'
+    model = joblib.load(file_name)
     widgets = [FormatLabel('Processed: %(value)d/%(max)d matches. '), ETA(), Percentage(), ' ', Bar()]
     pbar = ProgressBar(widgets=widgets, maxval=NUM_MATCHES).start()
 
@@ -49,18 +48,17 @@ def test():
     pbar.finish()
 
     accuracy = float(correct_predictions) / NUM_MATCHES
-    print 'Accuracy of KNN model: %f' % accuracy
+    print('Accuracy of KNN model: %f' % accuracy)
 
     # flip all -1 true labels to 0 for f1 scoring
     for i, match in enumerate(Y):
-        if match == -1:
-            Y[i] = 0
+        if match == -1:Y[i] = 0
 
     prec, recall, f1, support = precision_recall_fscore_support(Y, Y_pred, average='macro')
-    print 'Precision: ',prec
-    print 'Recall: ',recall
-    print 'F1 Score: ',f1
-    print 'Support: ',support
+    print('Precision: ',prec)
+    print('Recall: ',recall)
+    print('F1 Score: ',f1)
+    print('Support: ',support)
 
     # Accuracy of KNN model: 0.678074
     # Precision:  0.764119601329

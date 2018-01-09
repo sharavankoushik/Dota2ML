@@ -1,9 +1,9 @@
 from sklearn.neighbors import KNeighborsClassifier
-import pickle
+import pickle,joblib
 import numpy as np
 
 # Import the preprocessed x matrix and Y vector
-preprocessed = np.load('train_51022.npz')
+preprocessed = np.load('../logistic_regression/train_147615.npz')
 X = preprocessed['X']
 Y = preprocessed['Y']
 
@@ -23,7 +23,7 @@ def poly_weights_recommend(distances):
 NUM_HEROES = 108
 NUM_MATCHES = len(X)
 
-print 'Training recommendation models using data from %d matches...' % NUM_MATCHES
+print('Training recommendation models using data from %d matches...' % NUM_MATCHES)
 
 models = []
 
@@ -42,8 +42,8 @@ for hero_id in range(1, 109):
     Y_filtered = np.array(Y_filtered)
     try:
         models.append(KNeighborsClassifier(n_neighbors=len(X_filtered),metric=my_distance,weights=poly_weights_recommend).fit(X_filtered, Y_filtered))
-    except Exception,e:
-        print "Radiant fit error!!! %s" % e
+    except Exception as e:
+        print("Radiant fit error!!! %s" % e)
 
 # Dire Loop
 for hero_id in range(1, 109):
@@ -60,9 +60,9 @@ for hero_id in range(1, 109):
     Y_filtered = np.array(Y_filtered)
     try:
         models.append(KNeighborsClassifier(n_neighbors=len(X_filtered),metric=my_distance,weights=poly_weights_recommend).fit(X_filtered, Y_filtered))
-    except Exception,e:
-        print "Dire fit error!!! %s" % e
+    except Exception as e:
+        print("Dire fit error!!! %s" % e)
 
 # Populate model pickle
-with open('recommend_models_%d.pkl' % NUM_MATCHES, 'w') as output_file:
-    pickle.dump(models, output_file)
+filename = 'recommend_models_%d.sav'%NUM_MATCHES
+joblib.dump(models, filename)
