@@ -41,7 +41,7 @@ class D2KNearestNeighbors:
             X[hero_id - 1 + NUM_HEROES] = 1
         return X
 
-    """ 
+    """
        1. Run the algorithm on radiant_query to get radiant_prob, the probability that the radiant team in radiant_query wins the             match.
 
        2. Construct dire_query by swapping the radiant and dire teams in radiant_query so that the radiant team is now the bottom             half of the feature vector and the dire team is now the top half of the feature vector.
