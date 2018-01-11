@@ -55,11 +55,6 @@ class Recommender extends Component {
             <Card.Header as="h3" textAlign="center">
               {hero.localized_name}
             </Card.Header>
-            <Statistic><Statistic.Label>Percentage of each Hero</Statistic.Label>
-            {
-              this.state.prob_every_hero.map(prob => { return (<Statistic.Value key={prob}>{prob}%</Statistic.Value>)})
-            }
-            </Statistic>
             <Card.Content extra>
               <Button basic color="green" onClick={this.handleAdd} hero={hero}>
                 Add to my list
@@ -89,6 +84,14 @@ class Recommender extends Component {
               <Statistic>
                 <Statistic.Value>{this.state.prob}%</Statistic.Value>
                 <Statistic.Label>The probability of picks winning based on the opponenets chosen</Statistic.Label>
+                <Statistic.Label>Percentage of each Hero</Statistic.Label>
+                <br/>
+                <Grid columns={5} stretched>
+                {
+                  this.state.prob_every_hero.map(prob => { return (<Statistic.Value key={prob}>{prob}%</Statistic.Value>)})
+                }
+                <br/><br/>
+              </Grid>
               </Statistic>
               <Grid columns={5} centered stretched>
                 {this.renderRecommendation()}
