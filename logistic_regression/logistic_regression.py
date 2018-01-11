@@ -6,16 +6,9 @@ NUM_FEATURES = NUM_HEROES * 2
 
 class D2LogisticRegression:
     def __init__(self, model_root='logistic_regression'):
-        #model_path = os.path.join(model_root, 'model.pkl')
         model_path = os.path.join(model_root, 'finalized_model.sav')
-        self.model = joblib.load(model_path)
-        """
-        result = loaded_model.score(X_test, Y_test)
-        print(result)
-        with open(model_path, 'rb') as input_file:
-            self.model = pickle.loads(input_file)
-        print(self.model)
-        """
+        self.model = joblib.load('/Users/kosh/Downloads/Dev/dotaml-master/logistic_regression/finalized_model.sav')
+
     def transform(self, my_team, their_team):
         X = np.zeros(NUM_FEATURES, dtype=np.int8)
         for hero_id in my_team:
@@ -42,7 +35,7 @@ class D2LogisticRegression:
         dire_query = np.concatenate((radiant_query[NUM_HEROES:NUM_FEATURES], radiant_query[0:NUM_HEROES])).reshape(1,-1)
         dire_prob = self.model.predict_proba(dire_query)[0][0]
         rad_prob = self.model.predict_proba(radiant_query)[0][1]
-        return (rad_prob + dire_prob) / 2
+        return (rad_prob + (1- dire_prob)) / 2
 
     def predict(self, dream_team, their_team):
         '''Returns the probability of the dream_team winning against their_team.'''

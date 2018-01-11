@@ -19,12 +19,13 @@ class Recommender extends Component {
     this.props.recommend(this.state.heroes, this.state.enemies);
     this.setState({loading : true})
   };
-  componentWillReceiveProps({ hero, enemy, recommendation, prob }) {
+  componentWillReceiveProps({ hero, enemy, recommendation, prob, prob_every_hero }) {
     this.setState({
       heroes: hero,
       enemies: enemy,
       recommendation,
       prob,
+      prob_every_hero,
       loading : false
     });
   }
@@ -50,10 +51,15 @@ class Recommender extends Component {
       return (
         <Grid.Column key={hero.id}>
           <Card>
-            <Image src={hero.img} size="medium" />
+            <Image src={hero.img} size="large" />
             <Card.Header as="h3" textAlign="center">
               {hero.localized_name}
             </Card.Header>
+            <Statistic><Statistic.Label>Percentage of each Hero</Statistic.Label>
+            {
+              this.state.prob_every_hero.map(prob => { return (<Statistic.Value key={prob}>{prob}%</Statistic.Value>)})
+            }
+            </Statistic>
             <Card.Content extra>
               <Button basic color="green" onClick={this.handleAdd} hero={hero}>
                 Add to my list
@@ -64,9 +70,10 @@ class Recommender extends Component {
       );
     });
   }
-
+/*main render function*/
   render() {
     let bool = this.state.recommendation;
+    console.log(bool);
     if (bool) {
       bool = this.state.recommendation.length > 0;
     }
@@ -101,12 +108,12 @@ class Recommender extends Component {
   }
 }
 
-function mapStateToProps({ enemy, hero, recommendation: { prob, data } }) {
+function mapStateToProps({ enemy, hero, recommendation: { prob, data, indi_hero } }) {
   let show = false;
   if (enemy.length > 0) {
     show = true;
   }
-  return { show, enemy, hero, recommendation: data, prob };
+  return { show, enemy, hero, recommendation: data, prob, prob_every_hero : indi_hero};
 }
 
 function mapStateToDispatch(dispatch) {

@@ -48,6 +48,7 @@ export const recommend = (heroList, enemyList) => async dispatch => {
   const res = await axios.post('/api/recommend', req, {
     headers: { 'content-type': 'application/json' }
   });
+  console.log(res);
   dispatch({
     type: 'RECOMMEND',
     payload: res.data
