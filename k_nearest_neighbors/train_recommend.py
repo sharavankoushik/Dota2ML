@@ -3,7 +3,7 @@ import joblib
 import numpy as np
 
 # Import the preprocessed x matrix and Y vector
-preprocessed = np.load('train_110225.npz')
+preprocessed = np.load('data-source/train_110225.npz')
 X = preprocessed['X']
 Y = preprocessed['Y']
 
@@ -64,5 +64,5 @@ for hero_id in range(1, 109):
         print("Dire fit error!!! %s" % e)
 
 # Populate model
-filename = 'recommend_models_%d.sav'%NUM_MATCHES
+filename = 'data-source/recommend_models_%d.sav' % NUM_MATCHES
 joblib.dump(models, filename)

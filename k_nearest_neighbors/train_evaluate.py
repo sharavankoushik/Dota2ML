@@ -3,7 +3,7 @@ import pickle,joblib
 import numpy as np
 
 # Import the preprocessed x matrix and Y vector
-Train_Matrix = 'train_110225.npz'
+Train_Matrix = 'data-source/train_110225.npz'
 preprocessed = np.load(Train_Matrix)
 X = preprocessed['X']
 Y = preprocessed['Y']
@@ -29,5 +29,5 @@ print('Training evaluation model using data from %d matches...' % NUM_MATCHES)
 model = KNeighborsClassifier(n_neighbors=NUM_MATCHES,metric=my_distance,weights=poly_weights_evaluate).fit(X, Y)
 
 # Populate model pickle
-filename = 'evaluate_model_%d.sav' % NUM_MATCHES
+filename = 'data-source/evaluate_model_%d.sav' % NUM_MATCHES
 joblib.dump(model, filename)

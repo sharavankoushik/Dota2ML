@@ -30,8 +30,8 @@ class D2KNearestNeighbors:
         evaluate_path = os.path.join(model_root, 'evaluate_model_%d.sav' % TRAINING_SET_SIZE)
         print(recommend_path)
         print(evaluate_path)
-        self.recommend_models = joblib.load('k_nearest_neighbors/recommend_models_110225.sav')
-        self.evaluate_model = joblib.load('k_nearest_neighbors/evaluate_model_110225.sav')
+        self.recommend_models = joblib.load('k_nearest_neighbors/data-source/recommend_models_110225.sav')
+        self.evaluate_model = joblib.load('k_nearest_neighbors/data-source/evaluate_model_110225.sav')
 
     def transform(self, my_team, their_team):
         X = np.zeros(NUM_FEATURES, dtype=np.int8)

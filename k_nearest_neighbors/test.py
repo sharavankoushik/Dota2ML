@@ -7,7 +7,7 @@ NUM_HEROES = 108
 NUM_FEATURES = NUM_HEROES*2
 
 # Import the test x matrix and Y vector
-preprocessed = np.load('../logistic_regression/test_16401.npz')
+preprocessed = np.load('data-source/test_54291.npz')
 X = preprocessed['X']
 Y = preprocessed['Y']
 
@@ -25,7 +25,7 @@ def poly_weights_evaluate(distances):
     return np.array([weights])
 
 def test():
-    file_name = 'k_nearest_neighbors/evaluate_model_10000.sav'
+    file_name = 'data-source/evaluate_model_110225.sav'
     model = joblib.load(file_name)
     widgets = [FormatLabel('Processed: %(value)d/%(max)d matches. '), ETA(), Percentage(), ' ', Bar()]
     pbar = ProgressBar(widgets=widgets, maxval=NUM_MATCHES).start()

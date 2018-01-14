@@ -9,7 +9,7 @@ __pycache__/
 *.npz
 *.pkl
 *.sav
-
+k_nearest_neighbors/data-source/*
 
 LICENSE
 # C extensions

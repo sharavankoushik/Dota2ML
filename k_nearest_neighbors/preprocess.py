@@ -51,16 +51,7 @@ for i, record in enumerate(match_collection.find().limit(163905)):
 pbar.finish()
 
 print("Permuting, generating train and test sets.")
-# indices = np.random.permutation(NUM_MATCHES)
-# test_indices = indices[0:NUM_MATCHES//10]
-# train_indices = indices[NUM_MATCHES//10:NUM_MATCHES]
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
-# X_test = X[test_indices]
-# Y_test = Y[test_indices]
-
-# X_train = X[train_indices]
-# Y_train = Y[train_indices]
-
 print("Saving output file now...")
-np.savez_compressed('test_%d.npz' % len(X_test), X=X_test, Y=Y_test)
-np.savez_compressed('train_%d.npz' % len(X_train), X=X_train, Y=Y_train)
+np.savez_compressed('data-source/test_%d.npz' % len(X_test), X=X_test, Y=Y_test)
+np.savez_compressed('data-source/train_%d.npz' % len(X_train), X=X_train, Y=Y_train)
