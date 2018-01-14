@@ -16,7 +16,7 @@ def get_hero_human_readable(hero_id):
 def main():
     # Fill these out using hero IDs (see web API)
     my_team = []
-    their_team = [5, 15, 46, 91, 13]
+    their_team = [91,2, 11, 5, 81]
 
     print('My Team: %s' % [get_hero_human_readable(hero_id) for hero_id in my_team])
     print('Their Team: %s' % [get_hero_human_readable(hero_id) for hero_id in their_team])

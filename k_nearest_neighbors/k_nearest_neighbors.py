@@ -5,7 +5,7 @@ NUM_HEROES = 108
 NUM_FEATURES = NUM_HEROES * 2
 NUM_IN_QUERY = 0
 # Lower this value to speed up recommendation engine
-TRAINING_SET_SIZE = 10000
+TRAINING_SET_SIZE = 110225
 
 def my_distance(vec1,vec2):
     '''Returns a count of the elements that were 1 in both vec1 and vec2.'''
@@ -30,8 +30,8 @@ class D2KNearestNeighbors:
         evaluate_path = os.path.join(model_root, 'evaluate_model_%d.sav' % TRAINING_SET_SIZE)
         print(recommend_path)
         print(evaluate_path)
-        self.recommend_models = joblib.load('/Users/kosh/Downloads/Dev/dotaml-master/k_nearest_neighbors/recommend_models_10000.sav')
-        self.evaluate_model = joblib.load('/Users/kosh/Downloads/Dev/dotaml-master/k_nearest_neighbors/evaluate_model_10000.sav')
+        self.recommend_models = joblib.load('k_nearest_neighbors/recommend_models_110225.sav')
+        self.evaluate_model = joblib.load('k_nearest_neighbors/evaluate_model_110225.sav')
 
     def transform(self, my_team, their_team):
         X = np.zeros(NUM_FEATURES, dtype=np.int8)
@@ -41,17 +41,6 @@ class D2KNearestNeighbors:
             X[hero_id - 1 + NUM_HEROES] = 1
         return X
 
-    """ 
-       1. Run the algorithm on radiant_query to get radiant_prob, the probability that the radiant team in radiant_query wins the             match.
-
-       2. Construct dire_query by swapping the radiant and dire teams in radiant_query so that the radiant team is now the bottom             half of the feature vector and the dire team is now the top half of the feature vector.
-
-       3. Run the algorithm on dire_query to get dire_prob, the probability that the radiant team in radiant_query loses the match            if it was actually the dire team instead.
-
-       4. Calculate the overall probability overall_prob as the average of radiant_prob and (1 - dire_prob).
-
-       5. Predict the outcome of the match specified by radiant_query as the radiant team winning if overall_prob > 0.5 and as the            dire team winning otherwise.
-       """
     def recommend(self, my_team, their_team, hero_candidates):
         '''Returns a list of (hero, probablility of winning with hero added) recommended to complete my_team.'''
         global NUM_IN_QUERY

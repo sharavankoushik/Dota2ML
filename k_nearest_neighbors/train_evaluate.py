@@ -3,14 +3,14 @@ import pickle,joblib
 import numpy as np
 
 # Import the preprocessed x matrix and Y vector
-Train_Matrix = '../logistic_regression/train_147615.npz'
+Train_Matrix = 'train_110225.npz'
 preprocessed = np.load(Train_Matrix)
 X = preprocessed['X']
 Y = preprocessed['Y']
 
-relevant_indices = range(0, 10000)
-X = X[relevant_indices]
-Y = Y[relevant_indices]
+# relevant_indices = range(0, 10000)
+# X = X[relevant_indices]
+# Y = Y[relevant_indices]
 
 def my_distance(vec1,vec2):
     '''Returns a count of the elements that were 1 in both vec1 and vec2.'''

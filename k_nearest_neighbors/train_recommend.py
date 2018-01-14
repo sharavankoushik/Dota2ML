@@ -1,15 +1,15 @@
 from sklearn.neighbors import KNeighborsClassifier
-import pickle,joblib
+import joblib
 import numpy as np
 
 # Import the preprocessed x matrix and Y vector
-preprocessed = np.load('../logistic_regression/train_147615.npz')
+preprocessed = np.load('train_110225.npz')
 X = preprocessed['X']
 Y = preprocessed['Y']
 
-relevant_indices = range(0, 10000)
-X = X[relevant_indices]
-Y = Y[relevant_indices]
+# relevant_indices = range(0, 10000)
+# X = X[relevant_indices]
+# Y = Y[relevant_indices]
 
 def my_distance(vec1,vec2):
     '''Returns a count of the elements that were 1 in both vec1 and vec2.'''
@@ -63,6 +63,6 @@ for hero_id in range(1, 109):
     except Exception as e:
         print("Dire fit error!!! %s" % e)
 
-# Populate model pickle
+# Populate model
 filename = 'recommend_models_%d.sav'%NUM_MATCHES
 joblib.dump(models, filename)

@@ -45,13 +45,13 @@ K = 2
 FOLDS_FINISHED = 0
 
 # Import the preprocessed X matrix and Y vector
-preprocessed = np.load('../logistic_regression/train_147615.npz')
+preprocessed = np.load('train_110225.npz')
 X = preprocessed['X']
 Y = preprocessed['Y']
 
-NUM_MATCHES = 20000
-X = X[0:NUM_MATCHES]
-Y = Y[0:NUM_MATCHES]
+NUM_MATCHES = len(X)
+# X = X[0:NUM_MATCHES]
+# Y = Y[0:NUM_MATCHES]
 
 print('Training using data from %d matches...' % NUM_MATCHES)
 #X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)

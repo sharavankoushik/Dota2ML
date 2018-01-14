@@ -3,9 +3,10 @@ from progressbar import ProgressBar, Bar, Percentage, FormatLabel, ETA
 import numpy as np
 import os
 from sklearn.model_selection import train_test_split
+
 np.set_printoptions(threshold=np.nan)
-client = MongoClient(host='localhost',port=27017)
-db = client[os.getenv('DOTABOT_DB_NAME', 'dotabot')]
+client = MongoClient(host='localhost', port=27017)
+db = client[os.getenv('DOTABOT_DB_NAME', 'dotabot_db')]
 match_collection = db.matches
 
 # We're going to create a training matrix, X, where each
@@ -21,7 +22,7 @@ NUM_FEATURES = NUM_HEROES * 2
 
 # Our training label vector, Y, is a bit vector indicating
 # whether radiant won (1) or lost (-1)
-NUM_MATCHES = match_collection.count()-1000
+NUM_MATCHES = match_collection.count()
 
 # Initialize training matrix
 X = np.zeros((NUM_MATCHES, NUM_FEATURES), dtype=np.int8)
@@ -29,19 +30,18 @@ X = np.zeros((NUM_MATCHES, NUM_FEATURES), dtype=np.int8)
 # Initialize training label vector
 Y = np.zeros(NUM_MATCHES, dtype=np.int8)
 
-#progressbar and widget info for commandline
+# progressbar and widget info for commandline
 widgets = [FormatLabel('Processed: %(value)d/%(max)d matches. '), ETA(), Percentage(), ' ', Bar()]
 pbar = ProgressBar(widgets=widgets, maxval=NUM_MATCHES).start()
 
-for i, record in enumerate(match_collection.find()):
+for i, record in enumerate(match_collection.find().limit(163905)):
     pbar.update(i)
-    Y[i] = 1 if record['radiant_win'] else -1
-    players = record['players']
-    for player in players:
+    if not record['radiant_win']:
+        Y[i] = 0
+    else: Y[i]= 1
+    ''' If the left-most bit of player_slot is set,this player is on dire, so push the index accordingly'''
+    for player in record['players']:
         hero_id = player['hero_id'] - 1
-
-        # If the left-most bit of player_slot is set,
-        # this player is on dire, so push the index accordingly
         player_slot = player['player_slot']
         if player_slot >= 128:
             hero_id += NUM_HEROES
@@ -51,17 +51,16 @@ for i, record in enumerate(match_collection.find()):
 pbar.finish()
 
 print("Permuting, generating train and test sets.")
-#indices = np.random.permutation(NUM_MATCHES)
-#test_indices = indices[0:NUM_MATCHES//10]
-#train_indices = indices[NUM_MATCHES//10:NUM_MATCHES]
+# indices = np.random.permutation(NUM_MATCHES)
+# test_indices = indices[0:NUM_MATCHES//10]
+# train_indices = indices[NUM_MATCHES//10:NUM_MATCHES]
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
-#X_test = X[test_indices]
-#Y_test = Y[test_indices]
+# X_test = X[test_indices]
+# Y_test = Y[test_indices]
 
-#X_train = X[train_indices]
-#Y_train = Y[train_indices]
+# X_train = X[train_indices]
+# Y_train = Y[train_indices]
 
 print("Saving output file now...")
 np.savez_compressed('test_%d.npz' % len(X_test), X=X_test, Y=Y_test)
 np.savez_compressed('train_%d.npz' % len(X_train), X=X_train, Y=Y_train)
-
