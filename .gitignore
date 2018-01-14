@@ -112,3 +112,11 @@ ENV/
 
 #data files
 dotabot_db/*
+
+#npm files
+node_modules/*
+include/*
+
+#Binary Files
+bin/*
+lib/*
